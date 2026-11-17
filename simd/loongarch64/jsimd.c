@@ -346,7 +346,19 @@ jsimd_can_rgb_ycc(void)
 GLOBAL(int)
 jsimd_can_ycc_rgb(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (BITS_IN_JSAMPLE != 8)
+    return 0;
+  if (sizeof(JDIMENSION) != 4)
+    return 0;
+  if ((RGB_PIXELSIZE != 3) && (RGB_PIXELSIZE != 4))
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_ycc_rgb ==== */
@@ -683,8 +695,6 @@ jsimd_ycc_rgb565_convert(j_decompress_ptr cinfo, JSAMPIMAGE input_buf, JDIMENSIO
 GLOBAL(void)
 jsimd_ycc_rgb_convert(j_decompress_ptr cinfo, JSAMPIMAGE input_buf, JDIMENSION input_row, JSAMPARRAY output_buf, int num_rows)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_ycc_rgb_convert_lsx(cinfo, input_buf, input_row, output_buf, num_rows);
 }
 /* ==== END fn=jsimd_ycc_rgb_convert ==== */
