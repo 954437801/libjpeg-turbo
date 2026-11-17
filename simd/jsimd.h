@@ -27,6 +27,7 @@
 #define JSIMD_ALTIVEC  0x40
 #define JSIMD_AVX2     0x80
 #define JSIMD_MMI      0x100
+#define JSIMD_LSX      0x200
 
 /* SIMD Ext: retrieve SIMD/CPU information */
 EXTERN(unsigned int) jpeg_simd_cpu_support(void);
@@ -1256,3 +1257,12 @@ EXTERN(int) jsimd_encode_mcu_AC_refine_prepare_sse2
 EXTERN(int) jsimd_encode_mcu_AC_refine_prepare_neon
   (const JCOEF *block, const int *jpeg_natural_order_start, int Sl, int Al,
    JCOEF *absvalues, size_t *bits);
+
+/* LoongArch LSX color conversion */
+EXTERN(void) jsimd_ycc_rgb_convert_lsx
+  (j_decompress_ptr cinfo, JSAMPIMAGE input_buf, JDIMENSION input_row,
+   JSAMPARRAY output_buf, int num_rows);
+
+EXTERN(void) jsimd_rgb_ycc_convert_lsx
+  (j_compress_ptr cinfo, JSAMPARRAY input_buf, JSAMPIMAGE output_buf,
+   JDIMENSION output_row, int num_rows);

@@ -454,6 +454,43 @@ endif()
 
 
 ###############################################################################
+# LoongArch64 (Intrinsics)
+###############################################################################
+
+elseif(CPU_TYPE STREQUAL "loongarch64")
+
+include(CheckCSourceCompiles)
+set(CMAKE_REQUIRED_FLAGS -mlsx)
+check_c_source_compiles("
+  #include <lsxintrin.h>
+  int main(void) {
+    __m128i a = __lsx_vldi(0);
+    a = __lsx_vadd_b(a, a);
+    (void)a;
+    return 0;
+  }" HAVE_LSX)
+unset(CMAKE_REQUIRED_FLAGS)
+
+if(NOT HAVE_LSX)
+  simd_fail("SIMD extensions not available for this CPU (LoongArch LSX)")
+  return()
+endif()
+
+set(SIMD_SOURCES)
+
+# Only the kernels themselves need the ISA flag; jsimd.c stays generic so
+# that it can be compiled by any LoongArch toolchain.
+set_source_files_properties(${SIMD_SOURCES} PROPERTIES
+  COMPILE_FLAGS -mlsx)
+
+add_library(simd OBJECT ${SIMD_SOURCES} loongarch64/jsimd.c)
+
+if(CMAKE_POSITION_INDEPENDENT_CODE OR ENABLE_SHARED)
+  set_target_properties(simd PROPERTIES POSITION_INDEPENDENT_CODE 1)
+endif()
+
+
+###############################################################################
 # None
 ###############################################################################
 
