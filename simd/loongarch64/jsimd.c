@@ -153,7 +153,17 @@ jsimd_can_fdct_islow(void)
 GLOBAL(int)
 jsimd_can_h1v2_fancy_upsample(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (BITS_IN_JSAMPLE != 8)
+    return 0;
+  if (sizeof(JDIMENSION) != 4)
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_h1v2_fancy_upsample ==== */
@@ -171,7 +181,17 @@ jsimd_can_h2v1_downsample(void)
 GLOBAL(int)
 jsimd_can_h2v1_fancy_upsample(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (BITS_IN_JSAMPLE != 8)
+    return 0;
+  if (sizeof(JDIMENSION) != 4)
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_h2v1_fancy_upsample ==== */
@@ -189,7 +209,17 @@ jsimd_can_h2v1_merged_upsample(void)
 GLOBAL(int)
 jsimd_can_h2v1_upsample(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (BITS_IN_JSAMPLE != 8)
+    return 0;
+  if (sizeof(JDIMENSION) != 4)
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_h2v1_upsample ==== */
@@ -207,7 +237,17 @@ jsimd_can_h2v2_downsample(void)
 GLOBAL(int)
 jsimd_can_h2v2_fancy_upsample(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (BITS_IN_JSAMPLE != 8)
+    return 0;
+  if (sizeof(JDIMENSION) != 4)
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_h2v2_fancy_upsample ==== */
@@ -234,7 +274,17 @@ jsimd_can_h2v2_smooth_downsample(void)
 GLOBAL(int)
 jsimd_can_h2v2_upsample(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (BITS_IN_JSAMPLE != 8)
+    return 0;
+  if (sizeof(JDIMENSION) != 4)
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_h2v2_upsample ==== */
@@ -491,9 +541,9 @@ jsimd_fdct_islow(DCTELEM *data)
 GLOBAL(void)
 jsimd_h1v2_fancy_upsample(j_decompress_ptr cinfo, jpeg_component_info *compptr, JSAMPARRAY input_data, JSAMPARRAY *output_data_ptr)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_h1v2_fancy_upsample_lsx(cinfo->max_v_samp_factor,
+                                compptr->downsampled_width, input_data,
+                                output_data_ptr);
 }
 /* ==== END fn=jsimd_h1v2_fancy_upsample ==== */
 
@@ -511,9 +561,9 @@ jsimd_h2v1_downsample(j_compress_ptr cinfo, jpeg_component_info *compptr, JSAMPA
 GLOBAL(void)
 jsimd_h2v1_fancy_upsample(j_decompress_ptr cinfo, jpeg_component_info *compptr, JSAMPARRAY input_data, JSAMPARRAY *output_data_ptr)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_h2v1_fancy_upsample_lsx(cinfo->max_v_samp_factor,
+                                compptr->downsampled_width, input_data,
+                                output_data_ptr);
 }
 /* ==== END fn=jsimd_h2v1_fancy_upsample ==== */
 
@@ -531,9 +581,8 @@ jsimd_h2v1_merged_upsample(j_decompress_ptr cinfo, JSAMPIMAGE input_buf, JDIMENS
 GLOBAL(void)
 jsimd_h2v1_upsample(j_decompress_ptr cinfo, jpeg_component_info *compptr, JSAMPARRAY input_data, JSAMPARRAY *output_data_ptr)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_h2v1_upsample_lsx(cinfo->max_v_samp_factor, cinfo->output_width,
+                          input_data, output_data_ptr);
 }
 /* ==== END fn=jsimd_h2v1_upsample ==== */
 
@@ -551,9 +600,9 @@ jsimd_h2v2_downsample(j_compress_ptr cinfo, jpeg_component_info *compptr, JSAMPA
 GLOBAL(void)
 jsimd_h2v2_fancy_upsample(j_decompress_ptr cinfo, jpeg_component_info *compptr, JSAMPARRAY input_data, JSAMPARRAY *output_data_ptr)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_h2v2_fancy_upsample_lsx(cinfo->max_v_samp_factor,
+                                compptr->downsampled_width, input_data,
+                                output_data_ptr);
 }
 /* ==== END fn=jsimd_h2v2_fancy_upsample ==== */
 
@@ -581,9 +630,8 @@ jsimd_h2v2_smooth_downsample(j_compress_ptr cinfo, jpeg_component_info *compptr,
 GLOBAL(void)
 jsimd_h2v2_upsample(j_decompress_ptr cinfo, jpeg_component_info *compptr, JSAMPARRAY input_data, JSAMPARRAY *output_data_ptr)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_h2v2_upsample_lsx(cinfo->max_v_samp_factor, cinfo->output_width,
+                          input_data, output_data_ptr);
 }
 /* ==== END fn=jsimd_h2v2_upsample ==== */
 

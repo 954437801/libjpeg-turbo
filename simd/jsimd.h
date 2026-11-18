@@ -1273,3 +1273,20 @@ EXTERN(void) jsimd_convsamp_lsx
 
 EXTERN(void) jsimd_quantize_lsx
   (JCOEFPTR coef_block, DCTELEM *divisors, DCTELEM *workspace);
+
+/* LoongArch LSX upsampling */
+EXTERN(void) jsimd_h2v1_upsample_lsx
+  (int max_v_samp_factor, JDIMENSION output_width, JSAMPARRAY input_data,
+   JSAMPARRAY *output_data_ptr);
+EXTERN(void) jsimd_h2v2_upsample_lsx
+  (int max_v_samp_factor, JDIMENSION output_width, JSAMPARRAY input_data,
+   JSAMPARRAY *output_data_ptr);
+EXTERN(void) jsimd_h2v1_fancy_upsample_lsx
+  (int max_v_samp_factor, JDIMENSION downsampled_width, JSAMPARRAY input_data,
+   JSAMPARRAY *output_data_ptr);
+EXTERN(void) jsimd_h2v2_fancy_upsample_lsx
+  (int max_v_samp_factor, JDIMENSION downsampled_width, JSAMPARRAY input_data,
+   JSAMPARRAY *output_data_ptr);
+EXTERN(void) jsimd_h1v2_fancy_upsample_lsx
+  (int max_v_samp_factor, JDIMENSION downsampled_width, JSAMPARRAY input_data,
+   JSAMPARRAY *output_data_ptr);
