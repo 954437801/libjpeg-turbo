@@ -1266,3 +1266,10 @@ EXTERN(void) jsimd_ycc_rgb_convert_lsx
 EXTERN(void) jsimd_rgb_ycc_convert_lsx
   (j_compress_ptr cinfo, JSAMPARRAY input_buf, JSAMPIMAGE output_buf,
    JDIMENSION output_row, int num_rows);
+
+/* LoongArch LSX quantization */
+EXTERN(void) jsimd_convsamp_lsx
+  (JSAMPARRAY sample_data, JDIMENSION start_col, DCTELEM *workspace);
+
+EXTERN(void) jsimd_quantize_lsx
+  (JCOEFPTR coef_block, DCTELEM *divisors, DCTELEM *workspace);

@@ -76,7 +76,21 @@ jsimd_c_can_null_convert(void)
 GLOBAL(int)
 jsimd_can_convsamp(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (DCTSIZE != 8)
+    return 0;
+  if (BITS_IN_JSAMPLE != 8)
+    return 0;
+  if (sizeof(JDIMENSION) != 4)
+    return 0;
+  if (sizeof(DCTELEM) != 2)
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_convsamp ==== */
@@ -310,7 +324,19 @@ jsimd_can_int_upsample(void)
 GLOBAL(int)
 jsimd_can_quantize(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (DCTSIZE != 8)
+    return 0;
+  if (sizeof(JCOEF) != 2)
+    return 0;
+  if (sizeof(DCTELEM) != 2)
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_quantize ==== */
@@ -398,9 +424,7 @@ jsimd_c_null_convert(j_compress_ptr cinfo, JSAMPARRAY input_buf, JSAMPIMAGE outp
 GLOBAL(void)
 jsimd_convsamp(JSAMPARRAY sample_data, JDIMENSION start_col, DCTELEM *workspace)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_convsamp_lsx(sample_data, start_col, workspace);
 }
 /* ==== END fn=jsimd_convsamp ==== */
 
@@ -657,9 +681,7 @@ jsimd_int_upsample(j_decompress_ptr cinfo, jpeg_component_info *compptr, JSAMPAR
 GLOBAL(void)
 jsimd_quantize(JCOEFPTR coef_block, DCTELEM *divisors, DCTELEM *workspace)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_quantize_lsx(coef_block, divisors, workspace);
 }
 /* ==== END fn=jsimd_quantize ==== */
 
