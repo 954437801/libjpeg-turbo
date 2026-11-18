@@ -1295,3 +1295,16 @@ EXTERN(void) jsimd_h1v2_fancy_upsample_lsx
 EXTERN(void) jsimd_idct_islow_lsx
   (void *dct_table, JCOEFPTR coef_block, JSAMPARRAY output_buf,
    JDIMENSION output_col);
+
+/* LoongArch LSX forward DCT */
+EXTERN(void) jsimd_fdct_islow_lsx(DCTELEM *data);
+
+/* LoongArch LSX 2:1 horizontal downsampling */
+EXTERN(void) jsimd_h2v1_downsample_lsx
+  (JDIMENSION image_width, int max_v_samp_factor, JDIMENSION v_samp_factor,
+   JDIMENSION width_in_blocks, JSAMPARRAY input_data,
+   JSAMPARRAY output_data);
+EXTERN(void) jsimd_h2v2_downsample_lsx
+  (JDIMENSION image_width, int max_v_samp_factor, JDIMENSION v_samp_factor,
+   JDIMENSION width_in_blocks, JSAMPARRAY input_data,
+   JSAMPARRAY output_data);
