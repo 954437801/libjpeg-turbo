@@ -356,7 +356,21 @@ jsimd_can_idct_ifast(void)
 GLOBAL(int)
 jsimd_can_idct_islow(void)
 {
-  /* not implemented on LoongArch yet: fall back to the C version */
+  init_simd();
+
+  /* The code is optimised for these values only */
+  if (DCTSIZE != 8)
+    return 0;
+  if (BITS_IN_JSAMPLE != 8)
+    return 0;
+  if (sizeof(JCOEF) != 2)
+    return 0;
+  if (sizeof(ISLOW_MULT_TYPE) != 2)
+    return 0;
+
+  if (simd_support & JSIMD_LSX)
+    return 1;
+
   return 0;
 }
 /* ==== END fn=jsimd_can_idct_islow ==== */
@@ -709,9 +723,8 @@ jsimd_idct_ifast(j_decompress_ptr cinfo, jpeg_component_info *compptr, JCOEFPTR 
 GLOBAL(void)
 jsimd_idct_islow(j_decompress_ptr cinfo, jpeg_component_info *compptr, JCOEFPTR coef_block, JSAMPARRAY output_buf, JDIMENSION output_col)
 {
-  /* not implemented on LoongArch yet: this path is never taken
-   * because the corresponding jsimd_can_*() returns 0. */
-  (void)0;
+  jsimd_idct_islow_lsx(compptr->dct_table, coef_block, output_buf,
+                       output_col);
 }
 /* ==== END fn=jsimd_idct_islow ==== */
 

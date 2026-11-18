@@ -479,7 +479,8 @@ endif()
 set(SIMD_SOURCES loongarch64/jdcolor-lsx.c
   loongarch64/jccolor-lsx.c
   loongarch64/jquanti-lsx.c
-  loongarch64/jdsample-lsx.c)
+  loongarch64/jdsample-lsx.c
+  loongarch64/jidctint-lsx.c)
 
 # Only the kernels themselves need the ISA flag; jsimd.c stays generic so
 # that it can be compiled by any LoongArch toolchain.

@@ -1290,3 +1290,8 @@ EXTERN(void) jsimd_h2v2_fancy_upsample_lsx
 EXTERN(void) jsimd_h1v2_fancy_upsample_lsx
   (int max_v_samp_factor, JDIMENSION downsampled_width, JSAMPARRAY input_data,
    JSAMPARRAY *output_data_ptr);
+
+/* LoongArch LSX inverse DCT */
+EXTERN(void) jsimd_idct_islow_lsx
+  (void *dct_table, JCOEFPTR coef_block, JSAMPARRAY output_buf,
+   JDIMENSION output_col);
